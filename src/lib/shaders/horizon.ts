@@ -28,6 +28,32 @@ float hash(vec2 p) {
   return fract(p.x * p.y);
 }
 
+// Well-distributed hash (Dave Hoskins) — avoids the lattice artifacts of hash().
+float hash12(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
+}
+
+// One layer of sparse stars on a jittered grid of cellSize px.
+float starLayer(vec2 frag, float cellSize, float density, float t) {
+  vec2 grid = frag / cellSize;
+  vec2 cell = floor(grid);
+  float seed = hash12(cell);
+  if (seed < density) return 0.0;
+  vec2 pos = 0.2 + 0.6 * vec2(hash12(cell + 17.3), hash12(cell + 41.9));
+  float size = mix(0.12, 0.3, hash12(cell + 5.1));
+  float core = smoothstep(size, 0.0, length(fract(grid) - pos));
+  float brightness = mix(0.35, 1.0, pow(hash12(cell + 91.7), 3.0));
+  // Twinkle: each star pulses at its own rate, with a faster shimmer on top.
+  float rate = 0.8 + 1.6 * fract(seed * 91.7);
+  float phase = seed * 600.0;
+  float pulse = 0.5 + 0.5 * sin(t * rate + phase);
+  float shimmer = 0.5 + 0.5 * sin(t * rate * 3.7 + phase * 1.3);
+  float twinkle = 0.25 + 0.75 * pulse * mix(0.7, 1.0, shimmer);
+  return core * brightness * twinkle;
+}
+
 float noise(vec2 p) {
   vec2 i = floor(p);
   vec2 f = fract(p);
@@ -100,15 +126,9 @@ void main() {
   float streak = exp(-abs(offset.y) / 2.5) * exp(-abs(offset.x) / (uResolution.x * 0.08));
   color += warm * (bloom * 0.18 + streak * 0.18) * (0.4 + 0.6 * sky);
 
-  // Stars: soft 2px points, twinkling, fading out near the atmosphere.
-  vec2 grid = frag / 4.0;
-  vec2 cell = floor(grid);
-  float seed = hash(cell);
-  vec2 starPos = vec2(hash(cell + 7.1), hash(cell + 3.7));
-  float core = smoothstep(0.35, 0.0, length(fract(grid) - starPos));
-  float twinkle = 0.55 + 0.45 * sin(t * (0.8 + seed * 2.0) + seed * 600.0);
-  float starMask = step(0.992, seed) * smoothstep(80.0, 360.0, h) * sky;
-  color += vec3(core * twinkle * starMask * 0.9);
+  // Stars: two jittered layers with varied size and brightness so no grid shows.
+  float stars = starLayer(frag, 5.0, 0.985, t) + 0.6 * starLayer(frag + 137.0, 9.0, 0.97, t);
+  color += vec3(stars * smoothstep(80.0, 360.0, h) * sky);
 
   // Dither to hide 8-bit banding in the long gradients.
   color += (hash(frag + fract(t)) - 0.5) / 255.0;
