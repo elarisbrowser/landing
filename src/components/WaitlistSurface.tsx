@@ -11,6 +11,9 @@ import {
   WAITLIST_SURFACE,
 } from '../constants/waitlist';
 import { useWaitlist, type WaitlistState } from '../hooks/useWaitlist';
+import { loadDelay } from '../motion';
+
+const ENTRANCE_DELAY = loadDelay(4);
 
 const MotionBorderBeam = motion.create(BorderBeam);
 
@@ -34,7 +37,7 @@ function SurfaceContent({
     : {
         duration: 0.16,
         ease: 'easeOut' as const,
-        delay: hasEntered ? 0 : 0.4,
+        delay: hasEntered ? 0 : ENTRANCE_DELAY,
       };
   const textTransition = shouldReduceMotion
     ? { duration: 0 }
@@ -47,13 +50,11 @@ function SurfaceContent({
       {state === 'submitting' ? (
         <motion.div
           key="submitting"
-          initial={
-            shouldReduceMotion ? false : { opacity: 0, filter: 'blur(5px)' }
-          }
-          animate={{ opacity: 1, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, filter: 'blur(4px)' }}
+          initial={shouldReduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           transition={transition}
-          className="flex h-9 w-full items-center justify-center gap-2 text-sm font-medium"
+          className="flex h-9 w-full items-center justify-center gap-2 text-sm"
           role="status"
           aria-live="polite"
         >
@@ -75,56 +76,42 @@ function SurfaceContent({
           aria-live="polite"
         >
           <motion.h2
-            initial={
-              shouldReduceMotion
-                ? false
-                : { opacity: 0, y: 3, filter: 'blur(4px)' }
-            }
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 3 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ ...textTransition, delay: textRevealDelay }}
-            className="max-w-full whitespace-nowrap font-heading text-lg font-medium tracking-tight"
+            className="max-w-full whitespace-nowrap font-heading text-lg font-normal tracking-tight"
           >
             {WAITLIST_COPY.ready}
           </motion.h2>
           <motion.p
-            initial={
-              shouldReduceMotion
-                ? false
-                : { opacity: 0, y: 3, filter: 'blur(4px)' }
-            }
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 3 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ ...textTransition, delay: textRevealDelay + 0.04 }}
             className="max-w-full whitespace-nowrap text-sm text-on-overlay/85 sm:text-base"
           >
-            We’ll let you know when Photon is ready.
+            We’ll let you know when Elaris is ready.
           </motion.p>
           <motion.a
             href={xLink.href}
             target="_blank"
             rel="noreferrer"
-            initial={
-              shouldReduceMotion
-                ? false
-                : { opacity: 0, y: 3, filter: 'blur(4px)' }
-            }
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 3 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ ...textTransition, delay: textRevealDelay + 0.08 }}
             className="max-w-full whitespace-nowrap text-sm text-on-overlay/85 underline decoration-on-overlay/50 underline-offset-4 transition-colors hover:decoration-on-overlay sm:text-base"
           >
-            Follow @PhotonBrowser on X →
+            Follow @elarisbrowser on X →
           </motion.a>
         </motion.div>
       ) : (
         <motion.form
           key="form"
-          aria-label="Join the Photon waitlist"
+          aria-label="Join the Elaris waitlist"
           onSubmit={onSubmit}
           noValidate
-          initial={
-            shouldReduceMotion ? false : { opacity: 0, filter: 'blur(5px)' }
-          }
-          animate={{ opacity: 1, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, filter: 'blur(4px)' }}
+          initial={shouldReduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           transition={transition}
           className="flex w-full items-center gap-1"
         >
@@ -202,6 +189,7 @@ export function WaitlistSurface() {
                 width: `min(${dimensions.width}px, 100%)`,
                 opacity: 0,
                 y: 16,
+                filter: 'blur(10px)',
               }
         }
         animate={{
@@ -211,6 +199,7 @@ export function WaitlistSurface() {
           width: `min(${dimensions.width}px, 100%)`,
           opacity: 1,
           y: 0,
+          filter: 'blur(0px)',
         }}
         style={
           {
@@ -224,11 +213,11 @@ export function WaitlistSurface() {
             ? { duration: 0 }
             : {
                 ...WAITLIST_MORPH_SPRING,
-                delay: hasEntered ? 0 : 0.4,
+                delay: hasEntered ? 0 : ENTRANCE_DELAY,
                 opacity: {
                   duration: 0.32,
                   ease: 'easeOut',
-                  delay: hasEntered ? 0 : 0.4,
+                  delay: hasEntered ? 0 : ENTRANCE_DELAY,
                 },
               }
         }

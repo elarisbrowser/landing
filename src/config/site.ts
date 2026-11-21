@@ -1,36 +1,12 @@
 export const xLink = {
   label: 'X',
-  href: 'https://x.com/photonbrowser1',
+  href: 'https://x.com/elarisbrowser',
   external: true,
   icon: 'x',
 } as const;
 
 export const githubLink = {
   label: 'GitHub',
-  href: 'https://github.com/PhotonBrowser/photon',
+  href: 'https://github.com/elarisbrowser/elaris',
   external: true,
 } as const;
-
-export const siteLinks = [
-  { label: 'About', href: '/about' },
-  { label: 'Roadmap', href: '/roadmap' },
-  { label: 'Privacy', href: '/privacy' },
-] as const;
-
-export type Contributor = {
-  name: string;
-  displayName: string;
-  href?: string;
-  avatar?: string;
-  platform?: string;
-};
-
-export const contributors: readonly Contributor[] = [
-  {
-    name: '@theo_slat',
-    displayName: 'Theo',
-    href: 'https://x.com/theo_slat',
-    avatar: 'https://unavatar.io/x/theo_slat',
-    platform: 'x',
-  },
-];

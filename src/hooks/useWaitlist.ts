@@ -1,11 +1,33 @@
 import { useWaitlist as useClerkWaitlist } from '@clerk/react';
 import { type FormEvent, useState } from 'react';
+import { isClerkEnabled } from '../config/env';
 import { WAITLIST_COPY } from '../constants/waitlist';
+
+type JoinWaitlist = (emailAddress: string) => Promise<void>;
+
+function useClerkJoin(): JoinWaitlist {
+  const { waitlist } = useClerkWaitlist();
+  return async (emailAddress) => {
+    const { error } = await waitlist.join({ emailAddress });
+    if (error) throw error;
+  };
+}
+
+/** Local stand-in so the flow works in dev without a Clerk key. */
+function useMockJoin(): JoinWaitlist {
+  return async (emailAddress) => {
+    await new Promise((resolve) => setTimeout(resolve, 900));
+    console.info(`[waitlist:mock] joined ${emailAddress}`);
+  };
+}
+
+// Chosen once at module load, so hook order stays stable between renders.
+const useJoin = isClerkEnabled ? useClerkJoin : useMockJoin;
 
 export type WaitlistState = 'idle' | 'submitting' | 'success' | 'error';
 
 export function useWaitlist() {
-  const { waitlist } = useClerkWaitlist();
+  const join = useJoin();
   const [state, setState] = useState<WaitlistState>('idle');
   const [validationError, setValidationError] = useState<string | null>(null);
 
@@ -34,11 +56,7 @@ export function useWaitlist() {
     setState('submitting');
 
     try {
-      const { error } = await waitlist.join({
-        emailAddress: emailField.value.trim().toLowerCase(),
-      });
-
-      if (error) throw error;
+      await join(emailField.value.trim().toLowerCase());
 
       form.reset();
       setState('success');

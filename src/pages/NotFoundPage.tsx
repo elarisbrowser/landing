@@ -5,15 +5,15 @@ export function NotFoundPage() {
     <>
       <Animated
         as="p"
-        preset="blurUp"
+        preset="rise"
         delay={0.1}
-        className="text-sm font-medium tracking-[0.2em] text-on-overlay/75"
+        className="text-sm tracking-[0.2em] text-on-overlay/75"
       >
         404
       </Animated>
       <Animated
         as="h1"
-        preset="blurUp"
+        preset="rise"
         delay={0.2}
         className="font-heading text-4xl font-normal tracking-tight text-balance text-on-overlay sm:text-6xl"
       >
@@ -21,11 +21,11 @@ export function NotFoundPage() {
       </Animated>
       <Animated
         as="p"
-        preset="blurUp"
+        preset="rise"
         delay={0.3}
         className="max-w-xl text-lg text-on-overlay/80"
       >
-        This page isn’t part of the Photon experience.
+        This page isn’t part of the Elaris experience.
       </Animated>
       <Animated
         as="a"

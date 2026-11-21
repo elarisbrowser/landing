@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/inter";
 @import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
@@ -11,10 +10,16 @@
   corner-shape: squircle;
 }
 
+/* Radius as a share of the box (x% / y%), so corners scale with the image
+   instead of getting relatively rounder on small screens. */
+@utility rounded-demo {
+  border-radius: 1.5% / 2.25%;
+}
+
 @theme {
-  --color-photon-iris: #5e5dfb;
-  --color-photon-sky: #76b4fb;
-  --color-photon-mist: #bbd9fc;
+  --color-brand-iris: #5e5dfb;
+  --color-brand-sky: #76b4fb;
+  --color-brand-mist: #bbd9fc;
 
   /* Concentric pair: outer = inner + container padding (p-1). */
   --radius-inner: 0.5rem;
@@ -25,9 +30,9 @@
   --radius-outer-lg: 1.75rem;
 
   /* Soft (slightly desaturated) variants for large gradient surfaces. */
-  --color-photon-iris-soft: #6066e4;
-  --color-photon-sky-soft: #82b4ee;
-  --color-photon-mist-soft: #c0d9f5;
+  --color-brand-iris-soft: #6066e4;
+  --color-brand-sky-soft: #82b4ee;
+  --color-brand-mist-soft: #c0d9f5;
 
   /* Semantic surfaces: page backdrop, frosted overlay, hairline ring. */
   --color-page: #000000;
@@ -36,19 +41,17 @@
   --color-overlay-hover: rgb(255 255 255 / 0.25);
   --color-on-overlay: #ffffff;
   --color-on-overlay-muted: rgb(255 255 255 / 0.6);
-  --color-hairline: rgb(255 255 255 / 0.2);
+  --color-hairline: rgb(255 255 255 / 0.08);
+  --color-surface: rgb(255 255 255 / 0.04);
+
+  --shadow-demo:
+    0 40px 120px -20px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.04);
 
   /* Slightly lingered fade for all transition utilities. */
   --default-transition-duration: 250ms;
 }
 
 :root {
-  --avatar-lift: -4px;
-  --avatar-dur: 320ms;
-  --avatar-scale: 1.05;
-  --avatar-falloff: 0.45;
-  --avatar-ease-in: cubic-bezier(0.22, 1, 0.36, 1);
-  --avatar-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -118,8 +121,8 @@
 }
 
 @theme inline {
-  --font-sans: "Inter Variable", sans-serif;
-  --font-heading: "Geist Variable", sans-serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -165,7 +168,10 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-page text-foreground;
+  }
+  html::-webkit-scrollbar {
+    display: none;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
@@ -174,7 +180,16 @@
   /* Pressure press: shrink fast on press, spring back on release. Uses the
      independent `scale` property so it composes with Motion transforms. */
   html {
-    @apply font-sans;
+    @apply font-sans antialiased;
+    color-scheme: dark;
+    background-color: var(--color-page);
+    /* No gutter: the scrollbar never takes width from the layout. */
+    scrollbar-width: none;
+  }
+  /* Lenis drives scrolling; let the document size to its content. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
   }
 }
 
@@ -200,27 +215,6 @@
   transition:
     opacity 150ms ease-out,
     transform 150ms ease-out;
-}
-
-.gradual-blur-hover:hover {
-  --gradual-blur-hover-factor: var(--gradual-blur-hover-intensity);
-}
-
-.t-avatar-item {
-  position: relative;
-  display: inline-flex;
-}
-
-.t-avatar {
-  transform-origin: center;
-  transform: translateY(var(--shift, 0px)) scale(var(--scale-active, 1));
-  transition: transform var(--avatar-dur) var(--avatar-ease-in);
-  will-change: transform;
-}
-
-.t-avatar:hover,
-.t-avatar:focus-within {
-  z-index: 1;
 }
 
 .t-built-by-tooltip::after {
@@ -253,34 +247,6 @@
   border-bottom: 6px solid var(--color-overlay);
 }
 
-.t-contributor-tooltip {
-  top: auto;
-  bottom: calc(100% + 10px);
-  z-index: 20;
-  max-width: min(18rem, calc(100vw - 3rem));
-  white-space: nowrap;
-  text-align: center;
-}
-
-.t-contributor-tooltip::after {
-  top: 100%;
-  bottom: auto;
-  border-top: 6px solid var(--color-overlay);
-  border-bottom: 0;
-}
-
-.t-avatar-item:hover .t-built-by-tooltip {
-  opacity: 1;
-  transform: translate(-50%, 0) scale(1);
-  transition-delay: 80ms;
-}
-
-.t-avatar-item:hover .t-contributor-tooltip {
-  opacity: 1;
-  transform: translate(-50%, 0) scale(1);
-  transition-delay: 80ms;
-}
-
 /* Keep the hero compact on phones, including browsers that expose a wide
    layout viewport while rendering on a narrow touch screen. */
 @media (max-width: 640px), (pointer: coarse) and (hover: none) {
@@ -295,13 +261,6 @@
 
   .site-shell header {
     padding: 0.625rem;
-  }
-
-  .site-shell footer {
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    padding: 0 0.75rem 0.75rem;
-    font-size: 0.625rem;
   }
 
   .waitlist-surface {
@@ -334,13 +293,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .t-avatar {
-    /* biome-ignore lint/complexity/noImportantStyles: required reduced-motion override for inline spring timing */
-    transition: none !important;
-    /* biome-ignore lint/complexity/noImportantStyles: required reduced-motion override for inline spring transforms */
-    transform: none !important;
-  }
-
   .t-built-by-tooltip,
   .t-validation-tooltip {
     transition: none;

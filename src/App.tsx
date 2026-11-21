@@ -1,11 +1,11 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { lazy, Suspense, useEffect, useState } from 'react';
-import GradualBlur from './components/GradualBlur';
+import { GradualBlur } from './components/GradualBlur';
 import { HeroPanel } from './components/HeroPanel';
+import { useSmoothScroll } from './hooks/useSmoothScroll';
+import { SCROLL_EDGE_BLUR } from './motion';
+import { HomePage } from './pages/HomePage';
 
-const HomePage = lazy(() =>
-  import('./pages/HomePage').then((module) => ({ default: module.HomePage })),
-);
 const AboutPage = lazy(() =>
   import('./pages/AboutPage').then((module) => ({
     default: module.AboutPage,
@@ -21,28 +21,27 @@ const NotFoundPage = lazy(() =>
     default: module.NotFoundPage,
   })),
 );
-const PrivacyPolicyPage = lazy(() =>
-  import('./pages/PrivacyPolicyPage').then((module) => ({
-    default: module.PrivacyPolicyPage,
-  })),
-);
 
 function App() {
   const [pathname, setPathname] = useState(() => window.location.pathname);
+  // Only animate page swaps after navigation; the first load uses per-element entrances.
+  const [hasNavigated, setHasNavigated] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+  useSmoothScroll();
   const route =
     pathname === '/'
       ? 'home'
-      : pathname === '/privacy' || pathname === '/privacy-policy'
-        ? 'privacy'
-        : pathname === '/about'
-          ? 'about'
-          : pathname === '/roadmap'
-            ? 'roadmap'
-            : 'not-found';
+      : pathname === '/about'
+        ? 'about'
+        : pathname === '/roadmap'
+          ? 'roadmap'
+          : 'not-found';
 
   useEffect(() => {
-    const handlePopState = () => setPathname(window.location.pathname);
+    const handlePopState = () => {
+      setPathname(window.location.pathname);
+      setHasNavigated(true);
+    };
     const handleClick = (event: MouseEvent) => {
       if (
         event.defaultPrevented ||
@@ -76,7 +75,9 @@ function App() {
 
       event.preventDefault();
       window.history.pushState({}, '', destination.href);
+      window.scrollTo({ top: 0 });
       setPathname(destination.pathname);
+      setHasNavigated(true);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -93,30 +94,19 @@ function App() {
 
   return (
     <main className="site-shell flex min-h-svh min-w-0 bg-page p-4">
-      <GradualBlur
-        target="parent"
-        position="bottom"
-        height="4rem"
-        strength={1}
-        divCount={3}
-        curve="bezier"
-        exponential
-        opacity={1}
-        animated="scroll"
-      />
-      <HeroPanel showHomeLink={route !== 'home'} currentPath={pathname}>
+      <GradualBlur target="page" {...SCROLL_EDGE_BLUR} />
+      <HeroPanel>
         <AnimatePresence mode="wait">
           <motion.div
             key={route}
             initial={
-              shouldReduceMotion
-                ? false
-                : { opacity: 0, x: 8, filter: 'blur(3px)' }
+              shouldReduceMotion || !hasNavigated ? false : { opacity: 0, x: 8 }
             }
-            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, x: -8, filter: 'blur(3px)' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -8 }}
             transition={transition}
-            className="flex w-full flex-col items-center gap-5"
+            className="flex w-full flex-col items-center gap-5 px-6 data-[route=home]:px-0"
+            data-route={route}
           >
             <Suspense fallback={null}>
               {route === 'home' ? (
@@ -125,8 +115,6 @@ function App() {
                 <AboutPage />
               ) : route === 'roadmap' ? (
                 <RoadmapPage />
-              ) : route === 'privacy' ? (
-                <PrivacyPolicyPage />
               ) : (
                 <NotFoundPage />
               )}

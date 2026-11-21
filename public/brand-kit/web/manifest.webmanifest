@@ -1,6 +1,6 @@
 {
-  "name": "Photon Browser",
-  "short_name": "Photon Browser",
+  "name": "Elaris Browser",
+  "short_name": "Elaris Browser",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

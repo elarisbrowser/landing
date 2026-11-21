@@ -1,4 +1,4 @@
-# Photon Browser — logo guide
+# Elaris Browser — logo guide
 
 Use the SVG master whenever possible. Keep the original proportions and leave clear space of at least 10% of the logo height. Use the color logo on light surfaces, and the white version on dark surfaces. Monochrome versions intentionally merge color divisions.
 

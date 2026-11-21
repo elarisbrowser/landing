@@ -7,20 +7,10 @@ export interface MotionPreset {
 }
 
 export const motionPresets = {
-  springy: {
-    initial: { opacity: 0, scale: 0.9, y: 12 },
-    whileInView: { opacity: 1, scale: 1, y: 0 },
-    transition: { type: 'spring', stiffness: 300, damping: 20 },
-  },
-  morphing: {
-    initial: { opacity: 0, scale: 0.75, borderRadius: '50%', rotate: -4 },
-    whileInView: { opacity: 1, scale: 1, borderRadius: '16px', rotate: 0 },
-    transition: { type: 'spring', stiffness: 200, damping: 24 },
-  },
-  blurUp: {
-    initial: { opacity: 0, y: 24, filter: 'blur(8px)' },
+  rise: {
+    initial: { opacity: 0, y: 16, filter: 'blur(10px)' },
     whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
-    transition: { duration: 0.48, ease: 'easeOut' },
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
   },
   fadeUp: {
     initial: { opacity: 0, y: 16 },
@@ -32,11 +22,26 @@ export const motionPresets = {
     whileInView: { opacity: 1 },
     transition: { duration: 0.36, ease: 'easeOut' },
   },
-  scaleIn: {
-    initial: { opacity: 0, scale: 0.92 },
-    whileInView: { opacity: 1, scale: 1 },
-    transition: { duration: 0.4, ease: 'easeOut' },
-  },
 } satisfies Record<string, MotionPreset>;
 
 export type MotionPresetName = keyof typeof motionPresets;
+
+export const SMOOTH_SCROLL = { lerp: 0.1, wheelMultiplier: 1 } as const;
+
+/** Blur pinned to the viewport's bottom edge; fades out at the end of the page. */
+export const SCROLL_EDGE_BLUR = {
+  position: 'bottom',
+  height: '6rem',
+  strength: 2,
+  layers: 8,
+  curve: 'bezier',
+  exponential: true,
+  autoHide: true,
+  duration: 0,
+} as const;
+
+/** Page-load entrance: each step waits this long after the previous one. */
+export const LOAD_STAGGER = { start: 0.05, step: 0.09 } as const;
+
+export const loadDelay = (index: number) =>
+  LOAD_STAGGER.start + index * LOAD_STAGGER.step;

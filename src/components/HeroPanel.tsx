@@ -1,74 +1,21 @@
 import type { ReactNode } from 'react';
-import { contributors } from '../config/site';
-import { Animated } from '../motion';
-import { GitHubIconButton, SiteNav, XIconButton } from './SiteNav';
-
-function TheoCredit() {
-  const visibleContributors = contributors.filter(
-    (contributor) => contributor.avatar,
-  );
-  if (visibleContributors.length === 0) return null;
-
-  return (
-    <span className="inline-flex min-w-0 items-center gap-1.5 whitespace-nowrap text-on-overlay/65">
-      <span>Built with</span>
-      <span aria-label="love" role="img">
-        ❤️
-      </span>
-      <span>by:</span>
-      <span className="max-w-24">
-        <ul
-          aria-label="Contributors"
-          className="inline-flex list-none items-center -space-x-1.5 pr-1"
-        >
-          {visibleContributors.map((contributor) => (
-            <li key={contributor.name} className="t-avatar-item rounded-full">
-              <a
-                href={contributor.href}
-                target="_blank"
-                rel="noreferrer"
-                className="t-avatar inline-flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                aria-label={`Built by ${contributor.displayName}`}
-              >
-                <img
-                  src={contributor.avatar}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className="size-5 rounded-full object-cover"
-                />
-              </a>
-              <span
-                aria-hidden="true"
-                className="t-built-by-tooltip t-contributor-tooltip"
-              >
-                {contributor.name}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </span>
-    </span>
-  );
-}
+import { githubLink } from '../config/site';
+import { Animated, loadDelay } from '../motion';
+import { GitHubIconButton, XIconButton } from './SocialLinks';
 
 type HeroPanelProps = {
   children: ReactNode;
   contentClassName?: string;
-  showHomeLink?: boolean;
-  currentPath: string;
 };
 
-export function HeroPanel({
-  children,
-  contentClassName,
-  showHomeLink = false,
-  currentPath,
-}: HeroPanelProps) {
+export function HeroPanel({ children, contentClassName }: HeroPanelProps) {
   return (
-    <div className="relative isolate grid flex-1 overflow-hidden rounded-squircle bg-linear-to-b from-photon-iris-soft via-photon-sky-soft to-photon-mist-soft ring-1 ring-hairline ring-inset">
+    <div className="relative isolate grid flex-1 overflow-hidden rounded-squircle bg-page border border-hairline">
       {/* Background */}
-      <div aria-hidden="true" className="absolute inset-0 z-0 overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 z-0 h-svh overflow-hidden bg-linear-to-b from-brand-iris-soft via-brand-sky-soft to-brand-mist-soft"
+      >
         {/* Cloud image */}
         <img
           src="/clouds-low.webp"
@@ -78,44 +25,39 @@ export function HeroPanel({
 
         {/* Colour/tint overlay */}
         <div className="absolute inset-0 z-20 bg-page/25" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-36 bg-linear-to-t from-black/40 via-black/15 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-2/3 bg-linear-to-t from-page via-page/60 to-transparent" />
       </div>
 
       {/* UI */}
       <div className="relative z-30 col-start-1 row-start-1 flex flex-col">
-        <header className="grid w-full grid-cols-[1fr_auto_1fr] items-center px-2 py-3 sm:px-4 sm:py-4">
+        <header className="flex w-full items-center justify-between px-2 py-3 sm:px-4 sm:py-4">
           <Animated
             as="a"
             href="/"
-            preset="fade"
-            delay={0.05}
+            preset="rise"
+            delay={loadDelay(0)}
             className="flex items-center justify-self-start"
           >
             <img
               src="/brand-kit/logo/logo-color.svg"
-              alt="Photon"
+              alt="Elaris"
               className="size-8 drop-shadow-[0_2px_5px_rgba(20,35,90,0.35)] sm:size-9"
             />
           </Animated>
 
           <Animated
-            as="div"
-            preset="fade"
-            delay={0.1}
-            className="justify-self-center"
+            preset="rise"
+            delay={loadDelay(0)}
+            className="flex items-center gap-1.5"
           >
-            <SiteNav showHomeLink={showHomeLink} currentPath={currentPath} />
-          </Animated>
-
-          <div className="flex items-center justify-self-end gap-1.5">
             <XIconButton />
             <GitHubIconButton />
-          </div>
+          </Animated>
         </header>
 
         <div className="flex flex-1 items-center justify-center">
           <div
-            className={`flex w-full min-w-0 max-w-3xl flex-col items-center gap-5 px-6 text-center ${
+            className={`flex w-full min-w-0 flex-col items-center gap-5 text-center ${
               contentClassName ?? ''
             }`}
           >
@@ -123,19 +65,16 @@ export function HeroPanel({
           </div>
         </div>
 
-        <footer className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 pb-2 text-xs text-on-overlay/75">
-          <span className="order-2 w-full text-left sm:order-0 sm:w-auto">
-            © 2026 Photon Browser. All rights reserved.
-          </span>
-          <div className="order-1 flex w-full min-w-0 items-center justify-start gap-4 sm:order-0 sm:w-auto">
-            <TheoCredit />
-            <a
-              href="/privacy"
-              className="underline decoration-on-overlay/40 underline-offset-4 transition-colors hover:text-on-overlay hover:decoration-on-overlay focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-            >
-              Privacy Policy
-            </a>
-          </div>
+        <footer className="flex items-center justify-between gap-4 px-5 pb-4 text-xs text-on-overlay-muted">
+          <span>© 2026 Elaris</span>
+          <a
+            href={githubLink.href}
+            target="_blank"
+            rel="noreferrer"
+            className="transition-colors hover:text-on-overlay focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          >
+            Open source · GPL-3.0
+          </a>
         </footer>
       </div>
     </div>

@@ -6,19 +6,19 @@ export function RoadmapPage() {
     <>
       <Animated
         as="h1"
-        preset="blurUp"
+        preset="rise"
         delay={0.1}
         className="font-heading text-4xl font-normal tracking-tight text-balance text-on-overlay sm:text-6xl"
       >
-        Photon’s roadmap
+        Elaris’s roadmap
       </Animated>
       <Animated
         as="p"
-        preset="blurUp"
+        preset="rise"
         delay={0.2}
         className="max-w-xl text-lg text-on-overlay/80"
       >
-        Photon is in development. We’re working toward a fast, private browser
+        Elaris is in development. We’re working toward a fast, private browser
         built on Ladybird, and we’ll share milestones as they take shape.
       </Animated>
       <Animated
