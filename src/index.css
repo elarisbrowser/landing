@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "@fontsource/caveat/500.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -17,6 +18,9 @@
 }
 
 @theme {
+  --font-hand: "Caveat", cursive;
+  /* Hand-drawn annotation (e.g. "build from source" hint). */
+  --color-annotation: var(--color-brand-mist);
   --color-brand-iris: #5e5dfb;
   --color-brand-sky: #76b4fb;
   --color-brand-mist: #bbd9fc;
@@ -276,6 +280,19 @@
   animation: planet-rise 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Shader canvas eases in on load, like the CSS planet. */
+.hero-shader {
+  display: block;
+  animation: shader-in 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes shader-in {
+  from {
+    opacity: 0;
+    transform: translateY(4%);
+  }
+}
+
 @keyframes planet-rise {
   from {
     opacity: 0;
@@ -284,7 +301,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-planet {
+  .hero-planet,
+  .hero-shader {
     animation: none;
   }
 }

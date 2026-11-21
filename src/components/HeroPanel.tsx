@@ -3,6 +3,7 @@ import { githubLink } from '../config/site';
 import { Animated, loadDelay } from '../motion';
 import { HeroBackdrop } from './HeroBackdrop';
 import { GitHubIconButton, XIconButton } from './SocialLinks';
+import { SourceHint } from './SourceHint';
 
 type HeroPanelProps = {
   children: ReactNode;
@@ -34,10 +35,11 @@ export function HeroPanel({ children, contentClassName }: HeroPanelProps) {
           <Animated
             preset="rise"
             delay={loadDelay(0)}
-            className="flex items-center gap-1.5"
+            className="relative flex items-center gap-1.5"
           >
             <XIconButton />
             <GitHubIconButton />
+            <SourceHint />
           </Animated>
         </header>
 

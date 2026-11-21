@@ -10,3 +10,6 @@ export const githubLink = {
   href: 'https://github.com/elarisbrowser/elaris',
   external: true,
 } as const;
+
+/** Hero background: CSS planet horizon, or the WebGL shader version. */
+export const heroBackdrop: 'planet' | 'shader' = 'shader';
