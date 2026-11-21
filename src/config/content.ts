@@ -5,8 +5,8 @@ export const hero = {
 } as const;
 
 export const demo = {
-  src: '/elaris/elaris-pre-alpha-demo.webp',
+  src: '/elaris/elaris_demo.png',
   alt: 'Elaris browser window with a sidebar, search bar and new tab.',
-  width: 1600,
-  height: 1067,
+  width: 2568,
+  height: 1542,
 } as const;
