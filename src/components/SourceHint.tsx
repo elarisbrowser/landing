@@ -26,7 +26,7 @@ export function SourceHint() {
       aria-hidden="true"
       className="pointer-events-none absolute top-full right-0 mt-0.5 hidden items-end text-annotation sm:flex"
     >
-      <span className="mr-3 mb-0.5 -rotate-3 whitespace-pre font-hand text-[1.625rem] leading-none tracking-wide">
+      <span className="mr-1.5 -mb-1 -rotate-3 whitespace-pre font-hand text-[1.625rem] leading-none tracking-wide">
         {Array.from(label, (char, i) => (
           <motion.span
             // biome-ignore lint/suspicious/noArrayIndexKey: static string, order never changes

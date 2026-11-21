@@ -175,7 +175,7 @@ export function WaitlistSurface() {
     <>
       <MotionBorderBeam
         size="md"
-        colorVariant="colorful"
+        colorVariant="mono"
         strength={state === 'success' ? 0 : 1}
         active={state !== 'success' && shouldReduceMotion !== true}
         theme="dark"

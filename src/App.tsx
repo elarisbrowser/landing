@@ -6,16 +6,6 @@ import { useSmoothScroll } from './hooks/useSmoothScroll';
 import { SCROLL_EDGE_BLUR } from './motion';
 import { HomePage } from './pages/HomePage';
 
-const AboutPage = lazy(() =>
-  import('./pages/AboutPage').then((module) => ({
-    default: module.AboutPage,
-  })),
-);
-const RoadmapPage = lazy(() =>
-  import('./pages/RoadmapPage').then((module) => ({
-    default: module.RoadmapPage,
-  })),
-);
 const NotFoundPage = lazy(() =>
   import('./pages/NotFoundPage').then((module) => ({
     default: module.NotFoundPage,
@@ -28,14 +18,7 @@ function App() {
   const [hasNavigated, setHasNavigated] = useState(false);
   const shouldReduceMotion = useReducedMotion();
   useSmoothScroll();
-  const route =
-    pathname === '/'
-      ? 'home'
-      : pathname === '/about'
-        ? 'about'
-        : pathname === '/roadmap'
-          ? 'roadmap'
-          : 'not-found';
+  const route = pathname === '/' ? 'home' : 'not-found';
 
   useEffect(() => {
     const handlePopState = () => {
@@ -109,15 +92,7 @@ function App() {
             data-route={route}
           >
             <Suspense fallback={null}>
-              {route === 'home' ? (
-                <HomePage />
-              ) : route === 'about' ? (
-                <AboutPage />
-              ) : route === 'roadmap' ? (
-                <RoadmapPage />
-              ) : (
-                <NotFoundPage />
-              )}
+              {route === 'home' ? <HomePage /> : <NotFoundPage />}
             </Suspense>
           </motion.div>
         </AnimatePresence>
