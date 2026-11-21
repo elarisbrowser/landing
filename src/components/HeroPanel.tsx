@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { githubLink } from '../config/site';
 import { Animated, loadDelay } from '../motion';
+import { HeroBackdrop } from './HeroBackdrop';
 import { GitHubIconButton, XIconButton } from './SocialLinks';
 
 type HeroPanelProps = {
@@ -11,22 +12,7 @@ type HeroPanelProps = {
 export function HeroPanel({ children, contentClassName }: HeroPanelProps) {
   return (
     <div className="relative isolate grid flex-1 overflow-hidden rounded-squircle bg-page border border-hairline">
-      {/* Background */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 z-0 h-svh overflow-hidden bg-linear-to-b from-brand-iris-soft via-brand-sky-soft to-brand-mist-soft"
-      >
-        {/* Cloud image */}
-        <img
-          src="/clouds-low.webp"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-
-        {/* Colour/tint overlay */}
-        <div className="absolute inset-0 z-20 bg-page/25" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-2/3 bg-linear-to-t from-page via-page/60 to-transparent" />
-      </div>
+      <HeroBackdrop />
 
       {/* UI */}
       <div className="relative z-30 col-start-1 row-start-1 flex flex-col">

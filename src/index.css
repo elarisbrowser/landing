@@ -29,6 +29,14 @@
   --radius-inner-lg: 1.25rem;
   --radius-outer-lg: 1.75rem;
 
+  /* Planet horizon: size, where its crest sits, and the rim glow. */
+  --planet-size: max(180vw, 1400px);
+  --planet-crest: 54%;
+  --planet-rim: var(--color-brand-mist);
+  --planet-glow: var(--color-brand-sky);
+  --planet-haze: var(--color-brand-sky-soft);
+  --planet-edge-soft: 1px;
+
   /* Soft (slightly desaturated) variants for large gradient surfaces. */
   --color-brand-iris-soft: #6066e4;
   --color-brand-sky-soft: #82b4ee;
@@ -245,6 +253,40 @@
   bottom: 100%;
   border-top: 0;
   border-bottom: 6px solid var(--color-overlay);
+}
+
+/* Planet horizon --------------------------------------------------------- */
+.hero-planet {
+  position: absolute;
+  top: var(--planet-crest);
+  left: 50%;
+  width: var(--planet-size);
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  background: var(--color-page);
+  /* Light comes from the limb: bright rim fading up into atmosphere, and
+     only a faint wide spill onto the dark side (no mirrored glow). */
+  box-shadow:
+    0 -1px 6px 0 color-mix(in oklab, var(--planet-rim) 55%, transparent),
+    0 -16px 48px 0 color-mix(in oklab, var(--planet-glow) 28%, transparent),
+    0 -48px 140px 0 color-mix(in oklab, var(--planet-haze) 14%, transparent),
+    inset 0 24px 80px 0 color-mix(in oklab, var(--planet-glow) 8%, transparent);
+  filter: blur(var(--planet-edge-soft));
+  transform: translateX(-50%);
+  animation: planet-rise 1.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes planet-rise {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-planet {
+    animation: none;
+  }
 }
 
 /* Keep the hero compact on phones, including browsers that expose a wide
