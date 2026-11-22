@@ -9,7 +9,12 @@
   },
   "rules": {
     "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+    "react/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ]
   },
   "overrides": [
     {
@@ -18,5 +23,6 @@
         "shadcn/no-restyle": "off"
       }
     }
-  ]
+  ],
+  "ignorePatterns": ["src/components/liquid-glass/**"]
 }

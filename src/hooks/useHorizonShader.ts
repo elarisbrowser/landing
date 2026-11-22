@@ -49,7 +49,12 @@ export function useHorizonShader(
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const gl = canvas?.getContext('webgl', { antialias: false, alpha: false });
+    const gl = canvas?.getContext('webgl', {
+      antialias: false,
+      alpha: false,
+      // Lets the liquid glass copy the horizon into its backdrop.
+      preserveDrawingBuffer: true,
+    });
     if (!canvas || !gl) {
       setSupported(false);
       return;

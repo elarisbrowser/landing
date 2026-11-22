@@ -10,8 +10,10 @@ import {
   WAITLIST_MORPH_SPRING,
   WAITLIST_SURFACE,
 } from '../constants/waitlist';
+import { useSlowFrames } from '../hooks/useSlowFrames';
 import { useWaitlist, type WaitlistState } from '../hooks/useWaitlist';
 import { loadDelay } from '../motion';
+import { GlassLayer } from './liquid-glass/glass-layer';
 
 const ENTRANCE_DELAY = loadDelay(4);
 
@@ -164,6 +166,10 @@ export function WaitlistSurface() {
   const [hasEntered, setHasEntered] = useState(false);
   const { state, submit, validationError, clearValidationError } =
     useWaitlist();
+  // Liquid glass (WebGL) turns off for reduced motion or slow frames; the
+  // host keeps its blurred overlay look, which the glass replaces when drawn.
+  const slowFrames = useSlowFrames(shouldReduceMotion !== true);
+  const glassOff = shouldReduceMotion === true || slowFrames;
   const dimensions =
     state === 'submitting'
       ? WAITLIST_SURFACE.submitting
@@ -222,10 +228,18 @@ export function WaitlistSurface() {
               }
         }
         onAnimationComplete={() => setHasEntered(true)}
+        data-glass-host=""
         className={`waitlist-surface mx-auto mt-4 flex w-fit max-w-full items-center bg-overlay text-on-overlay ${
           validationError ? '!overflow-visible' : 'overflow-hidden'
         }`}
       >
+        {/* The glass layer must be the host's first child. */}
+        <GlassLayer
+          material="clear"
+          swell={false}
+          tint={0.1}
+          disabled={glassOff}
+        />
         <SurfaceContent
           state={state}
           shouldReduceMotion={shouldReduceMotion}
