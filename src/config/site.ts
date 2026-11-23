@@ -13,3 +13,8 @@ export const githubLink = {
 
 /** Hero background: CSS planet horizon, or the WebGL shader version. */
 export const heroBackdrop: 'planet' | 'shader' = 'shader';
+
+export const sponsorsConfig = {
+  account: 'elarisbrowser',
+  href: 'https://github.com/sponsors/elarisbrowser',
+} as const;

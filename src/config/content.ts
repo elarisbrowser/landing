@@ -10,3 +10,8 @@ export const demo = {
   width: 2568,
   height: 1542,
 } as const;
+
+export const sponsorsCopy = {
+  label: 'Sponsors',
+  cta: 'Sponsor elaris',
+} as const;

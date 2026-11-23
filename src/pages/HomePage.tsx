@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { BuiltByChip } from '../components/BuiltByChip';
 import { DemoShowcase } from '../components/sections/DemoShowcase';
+import { Sponsors } from '../components/sections/Sponsors';
 import { hero } from '../config/content';
 import { WAITLIST_SURFACE } from '../constants/waitlist';
 import { Animated, loadDelay } from '../motion';
@@ -46,6 +47,7 @@ export function HomePage() {
         </div>
       </div>
       <DemoShowcase />
+      <Sponsors />
     </div>
   );
 }
