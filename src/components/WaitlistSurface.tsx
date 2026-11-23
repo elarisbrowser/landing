@@ -7,6 +7,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { xLink } from '../config/site';
 import {
   WAITLIST_COPY,
+  WAITLIST_LIQUID_GLASS_ENABLED,
   WAITLIST_MORPH_SPRING,
   WAITLIST_SURFACE,
 } from '../constants/waitlist';
@@ -169,7 +170,8 @@ export function WaitlistSurface() {
   // Liquid glass (WebGL) turns off for reduced motion or slow frames; the
   // host keeps its blurred overlay look, which the glass replaces when drawn.
   const slowFrames = useSlowFrames(shouldReduceMotion !== true);
-  const glassOff = shouldReduceMotion === true || slowFrames;
+  const glassOff =
+    !WAITLIST_LIQUID_GLASS_ENABLED || shouldReduceMotion === true || slowFrames;
   const dimensions =
     state === 'submitting'
       ? WAITLIST_SURFACE.submitting

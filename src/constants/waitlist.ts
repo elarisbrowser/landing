@@ -5,6 +5,9 @@ export const WAITLIST_MORPH_SPRING = {
   mass: 0.8,
 };
 
+// Temporarily off: the host's blurred overlay is the fallback look.
+export const WAITLIST_LIQUID_GLASS_ENABLED = false;
+
 export const WAITLIST_SURFACE = {
   idle: { radius: 16, height: 44, padding: '4px', width: 384 },
   submitting: { radius: 22, height: 44, padding: '4px 16px', width: 280 },
