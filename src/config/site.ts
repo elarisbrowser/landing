@@ -11,8 +11,8 @@ export const githubLink = {
   external: true,
 } as const;
 
-/** Hero background: CSS planet horizon, or the WebGL shader version. */
-export const heroBackdrop: 'planet' | 'shader' = 'shader';
+/** Hero background: CSS planet horizon, or the pre-rendered horizon image. */
+export const heroBackdrop: 'planet' | 'image' = 'image';
 
 export const sponsorsConfig = {
   account: 'elarisbrowser',

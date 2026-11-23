@@ -5,7 +5,7 @@ export const hero = {
 } as const;
 
 export const demo = {
-  src: '/elaris/elaris_demo.png',
+  src: '/elaris/elaris_demo.webp',
   alt: 'Elaris browser window with a sidebar, search bar and new tab.',
   width: 2568,
   height: 1542,

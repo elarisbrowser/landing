@@ -1,11 +1,9 @@
-import { useRef } from 'react';
 import { heroBackdrop } from '../config/site';
-import { useHorizonShader } from '../hooks/useHorizonShader';
 
 const frame =
   'pointer-events-none absolute inset-x-0 top-0 z-0 h-svh overflow-hidden bg-page';
 
-/** CSS planet horizon; also the fallback when WebGL is unavailable. */
+/** CSS planet horizon. */
 function PlanetBackdrop() {
   return (
     <div aria-hidden="true" className={frame}>
@@ -14,19 +12,22 @@ function PlanetBackdrop() {
   );
 }
 
-/** WebGL horizon with shimmering atmosphere and stars. */
-function ShaderBackdrop() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const supported = useHorizonShader(canvasRef);
-  if (!supported) return <PlanetBackdrop />;
-
+/** Pre-rendered horizon (the WebGL shader, exported as a still). */
+function ImageBackdrop() {
   return (
     <div aria-hidden="true" className={frame}>
-      <canvas ref={canvasRef} className="hero-shader size-full" />
+      <img
+        src="/hero/horizon-1920x1080.webp"
+        alt=""
+        width={1920}
+        height={1080}
+        fetchPriority="high"
+        className="hero-horizon size-full object-cover"
+      />
     </div>
   );
 }
 
 export function HeroBackdrop() {
-  return heroBackdrop === 'shader' ? <ShaderBackdrop /> : <PlanetBackdrop />;
+  return heroBackdrop === 'image' ? <ImageBackdrop /> : <PlanetBackdrop />;
 }
