@@ -29,5 +29,9 @@ export type ManualSponsor = {
 
 /** Sponsors added by hand, shown alongside the ones fetched from GitHub. */
 export const manualSponsors: ManualSponsor[] = [
-  { name: 'Max Farrel', url: 'https://x.com/maxffarrell' },
+  {
+    name: 'Max Farrel',
+    url: 'https://x.com/maxffarrell',
+    avatarUrl: 'https://unavatar.io/x/maxffarrell',
+  },
 ];
