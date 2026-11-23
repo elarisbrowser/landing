@@ -129,11 +129,11 @@ export function GradualBlur({
       const from = level(i / count);
       const to = level((i + 1) / count);
       const radius = Math.sqrt(Math.max(to * to - from * from, 0));
+      // The scroll reveal is applied as opacity on the root, not here: changing
+      // a backdrop filter on every scroll frame forces a full re-blur.
       const filter = [
-        `blur(calc(${radius.toFixed(3)}px * var(--gradual-blur-reveal, 1) * var(--gradual-blur-hover, 1)))`,
-        boost !== 1
-          ? `saturate(calc(1 + ${(boost - 1).toFixed(4)} * var(--gradual-blur-reveal, 1)))`
-          : '',
+        `blur(calc(${radius.toFixed(3)}px * var(--gradual-blur-hover, 1)))`,
+        boost !== 1 ? `saturate(${boost.toFixed(4)})` : '',
       ]
         .filter(Boolean)
         .join(' ');
@@ -167,8 +167,7 @@ export function GradualBlur({
             background: tint,
             maskImage: tintMask,
             WebkitMaskImage: tintMask,
-            opacity:
-              'calc(var(--gradual-blur-reveal, 1) * min(var(--gradual-blur-hover, 1), 1))',
+            opacity: 'min(var(--gradual-blur-hover, 1), 1)',
             transition: `opacity ${fade}`,
           }
         : null;
@@ -291,6 +290,7 @@ export function GradualBlur({
   const rootStyle: CSSProperties = {
     position: target === 'page' ? 'fixed' : 'absolute',
     zIndex,
+    opacity: 'var(--gradual-blur-reveal, 1)',
     borderTopLeftRadius: corner('top', 'left'),
     borderTopRightRadius: corner('top', 'right'),
     borderBottomLeftRadius: corner('bottom', 'left'),

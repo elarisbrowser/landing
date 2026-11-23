@@ -33,7 +33,7 @@ export const SCROLL_EDGE_BLUR = {
   position: 'bottom',
   height: '6rem',
   strength: 2,
-  layers: 8,
+  layers: 4,
   curve: 'bezier',
   exponential: true,
   autoHide: true,
