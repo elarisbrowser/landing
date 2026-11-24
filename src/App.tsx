@@ -6,11 +6,28 @@ import { useSmoothScroll } from './hooks/useSmoothScroll';
 import { SCROLL_EDGE_BLUR } from './motion';
 import { HomePage } from './pages/HomePage';
 
+const AlphaPage = lazy(() =>
+  import('./pages/AlphaPage').then((module) => ({
+    default: module.AlphaPage,
+  })),
+);
+
 const NotFoundPage = lazy(() =>
   import('./pages/NotFoundPage').then((module) => ({
     default: module.NotFoundPage,
   })),
 );
+
+const routes: Record<string, 'home' | 'alpha'> = {
+  '/': 'home',
+  '/alpha': 'alpha',
+};
+
+const pages = {
+  home: <HomePage />,
+  alpha: <AlphaPage />,
+  'not-found': <NotFoundPage />,
+};
 
 function App() {
   const [pathname, setPathname] = useState(() => window.location.pathname);
@@ -18,7 +35,7 @@ function App() {
   const [hasNavigated, setHasNavigated] = useState(false);
   const shouldReduceMotion = useReducedMotion();
   useSmoothScroll();
-  const route = pathname === '/' ? 'home' : 'not-found';
+  const route = routes[pathname.replace(/\/+$/, '') || '/'] ?? 'not-found';
 
   useEffect(() => {
     const handlePopState = () => {
@@ -88,12 +105,10 @@ function App() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -8 }}
             transition={transition}
-            className="flex w-full flex-col items-center gap-5 px-6 data-[route=home]:px-0"
+            className="flex w-full flex-col items-center gap-5 px-6 data-[route=home]:px-0 data-[route=alpha]:px-0"
             data-route={route}
           >
-            <Suspense fallback={null}>
-              {route === 'home' ? <HomePage /> : <NotFoundPage />}
-            </Suspense>
+            <Suspense fallback={null}>{pages[route]}</Suspense>
           </motion.div>
         </AnimatePresence>
       </HeroPanel>
