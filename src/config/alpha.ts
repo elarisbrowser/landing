@@ -23,7 +23,7 @@ export const alphaCopy = {
   submitting: 'Sending application…',
   successTitle: 'Application received.',
   successBody:
-    'Thanks for applying. We’ll email you when your alpha build is ready.',
+    'Thanks for applying. If you’re accepted, we’ll add you as a friend on Discord or message you on X.',
   error: 'Something went wrong. Please try again.',
   required: 'Required',
   otherPlaceholder: 'Tell us more',
