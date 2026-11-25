@@ -40,13 +40,13 @@ export function HomePage() {
           {hero.description}
         </Animated>
         <div className="w-full">
-          <div className="mx-auto mb-3 flex w-fit max-w-full items-center gap-3 rounded-full bg-overlay px-4 py-2 text-on-overlay shadow-sm backdrop-blur-sm">
-            <span className="min-w-0 text-sm font-medium tracking-tight sm:text-base">
-              Alpha applications are open
+          <div className="mx-auto mb-2 flex w-fit max-w-full items-center gap-2 rounded-full bg-overlay px-3 py-1.5 text-on-overlay shadow-sm backdrop-blur-sm">
+            <span className="min-w-0 text-xs font-medium tracking-tight sm:text-sm">
+              We’re looking for testers!
             </span>
             <a
               href="/alpha"
-              className="shrink-0 rounded-full bg-paper px-4 py-1.5 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-overlay"
+              className="shrink-0 rounded-full bg-paper px-3 py-1 text-xs font-medium text-foreground shadow-sm transition-colors hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-overlay"
             >
               Apply
             </a>
