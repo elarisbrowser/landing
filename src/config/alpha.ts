@@ -21,6 +21,8 @@ export const alphaCopy = {
     'We’re opening the alpha to a small group of testers. If selected, we’ll contact you on Discord first. X is optional as a backup if you miss our request.',
   submit: 'Apply for alpha',
   submitting: 'Sending application…',
+  privacyNotice:
+    'We’ll use your details to review your application and contact you about the alpha.',
   successTitle: 'Application received.',
   successBody:
     'Thanks for applying. If selected, look for a Discord friend request and server invite. We’ll use X as a backup if you don’t see the request.',

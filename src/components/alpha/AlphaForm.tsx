@@ -132,6 +132,9 @@ export function AlphaForm() {
                     </motion.span>
                   </AnimatePresence>
                 </button>
+                <p className="text-center text-xs leading-relaxed text-on-overlay/65">
+                  {alphaCopy.privacyNotice}
+                </p>
                 {state === 'error' && (
                   <p
                     role="alert"
