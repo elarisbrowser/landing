@@ -16,7 +16,7 @@ import { useWaitlist, type WaitlistState } from '../hooks/useWaitlist';
 import { loadDelay } from '../motion';
 import { GlassLayer } from './liquid-glass/glass-layer';
 
-const ENTRANCE_DELAY = loadDelay(4);
+const ENTRANCE_DELAY = loadDelay(5);
 
 const MotionBorderBeam = motion.create(BorderBeam);
 

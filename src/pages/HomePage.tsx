@@ -11,7 +11,7 @@ const Waitlist = lazy(() => import('../components/Waitlist'));
 /** Reserves the waitlist's footprint so the hero doesn't shift while it loads. */
 const waitlistPlaceholder = (
   <div aria-hidden="true" className="flex flex-col items-center">
-    <div className="mb-3 h-10" />
+    <div className="mb-2 h-9" />
     <div className="mt-4" style={{ height: WAITLIST_SURFACE.idle.height }} />
   </div>
 );
@@ -40,17 +40,20 @@ export function HomePage() {
           {hero.description}
         </Animated>
         <div className="w-full">
-          <div className="mx-auto mb-2 flex w-fit max-w-full items-center gap-2 rounded-full bg-overlay px-3 py-1.5 text-on-overlay shadow-sm backdrop-blur-sm">
-            <span className="min-w-0 text-xs font-medium tracking-tight sm:text-sm">
+          <Animated
+            delay={loadDelay(4)}
+            className="mx-auto mb-2 flex w-fit max-w-full items-center gap-1 rounded-2xl bg-overlay p-1 text-on-overlay backdrop-blur-sm"
+          >
+            <span className="min-w-0 px-3 py-1 text-xs font-medium tracking-tight sm:text-sm">
               We’re looking for testers!
             </span>
             <a
               href="/alpha"
-              className="shrink-0 rounded-full bg-paper px-3 py-1 text-xs font-medium text-foreground shadow-sm transition-colors hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-overlay"
+              className="shrink-0 rounded-[10px] bg-paper px-3 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-overlay"
             >
               Apply
             </a>
-          </div>
+          </Animated>
           <Suspense fallback={waitlistPlaceholder}>
             <Waitlist />
           </Suspense>
