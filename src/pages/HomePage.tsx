@@ -42,14 +42,14 @@ export function HomePage() {
         <div className="w-full">
           <Animated
             delay={loadDelay(4)}
-            className="mx-auto mb-2 flex h-11 w-fit max-w-full items-center gap-1 rounded-[16px] bg-overlay p-1 text-on-overlay backdrop-blur-sm"
+            className="mx-auto mb-2 flex h-9 w-fit max-w-full items-center gap-1 rounded-xl bg-overlay p-1 text-on-overlay backdrop-blur-sm"
           >
-            <span className="min-w-0 px-3 text-xs font-medium tracking-tight sm:text-sm">
+            <span className="min-w-0 px-2 text-[11px] font-medium tracking-tight">
               We’re looking for testers!
             </span>
             <a
               href="/alpha"
-              className="flex h-9 shrink-0 items-center rounded-[12px] bg-paper px-3 text-xs font-medium text-foreground shadow-sm transition-colors hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-overlay"
+              className="flex h-7 shrink-0 items-center rounded-lg bg-paper px-2.5 text-[11px] font-medium text-foreground shadow-sm transition-colors hover:bg-white/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-overlay"
             >
               Apply
             </a>
