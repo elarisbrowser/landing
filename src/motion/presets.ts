@@ -45,3 +45,13 @@ export const LOAD_STAGGER = { start: 0.05, step: 0.09 } as const;
 
 export const loadDelay = (index: number) =>
   LOAD_STAGGER.start + index * LOAD_STAGGER.step;
+
+/** Alpha form: card resize, content swap and success reveal. */
+export const ALPHA_MOTION = {
+  ease: [0.16, 1, 0.3, 1] as const,
+  resize: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
+  exit: { duration: 0.22, ease: 'easeIn' as const },
+  /** Success content waits for the form to leave and the card to settle. */
+  contentDelay: 0.32,
+  stagger: 0.06,
+} as const;

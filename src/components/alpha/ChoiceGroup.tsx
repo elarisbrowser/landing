@@ -17,7 +17,7 @@ export function ChoiceGroup({ question }: { question: ChoiceQuestion }) {
     : question.options;
 
   return (
-    <fieldset className="flex flex-col gap-2.5">
+    <fieldset className="flex flex-col gap-2">
       <FieldLabel as="legend" required={question.required} hint={question.hint}>
         {question.label}
       </FieldLabel>

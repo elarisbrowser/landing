@@ -393,7 +393,6 @@ button:not(:disabled):active,
 
 /* Alpha application --------------------------------------------------- */
 .alpha-card {
-  padding: 1.75rem;
   border: 1px solid var(--color-hairline);
   border-radius: var(--radius-outer-lg);
   background: var(--color-surface);
@@ -401,10 +400,41 @@ button:not(:disabled):active,
   -webkit-backdrop-filter: blur(12px) saturate(140%);
 }
 
+/* Measured for the card's height animation, so the padding lives here. */
+.alpha-card-content {
+  position: relative;
+  padding: 1.5rem;
+}
+
+.alpha-agreements {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.alpha-success-badge {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: var(--color-paper);
+  color: var(--color-page);
+  box-shadow: 0 0 32px
+    color-mix(in oklab, var(--color-brand-sky) 45%, transparent);
+}
+
+.alpha-success-badge svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .alpha-input {
   width: 100%;
-  min-height: 2.75rem;
-  padding: 0.625rem 0.875rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid var(--color-field-border);
   border-radius: var(--radius-outer);
   background: var(--color-field);
@@ -429,8 +459,8 @@ button:not(:disabled):active,
 .alpha-chip {
   display: inline-flex;
   align-items: center;
-  height: 2.25rem;
-  padding: 0 0.875rem;
+  height: 2rem;
+  padding: 0 0.75rem;
   border: 1px solid var(--color-field-border);
   border-radius: 999px;
   background: var(--color-field);
@@ -438,6 +468,7 @@ button:not(:disabled):active,
   font-size: 0.8125rem;
   cursor: pointer;
   user-select: none;
+  transition-property: scale, background-color, border-color, color;
 }
 
 .alpha-chip:hover {
@@ -479,10 +510,10 @@ button:not(:disabled):active,
 .alpha-check {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  color: var(--color-on-overlay);
-  font-size: 0.875rem;
-  line-height: 1.5;
+  gap: 0.625rem;
+  color: var(--color-on-overlay-muted);
+  font-size: 0.8125rem;
+  line-height: 1.45;
   cursor: pointer;
 }
 
@@ -490,8 +521,8 @@ button:not(:disabled):active,
   display: grid;
   place-content: center;
   flex-shrink: 0;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.125rem;
+  height: 1.125rem;
   margin-top: 0.0625rem;
   border: 1px solid var(--color-field-border);
   border-radius: 0.375rem;
@@ -535,8 +566,7 @@ button:not(:disabled):active,
 }
 
 @media (max-width: 640px) {
-  .alpha-card {
-    padding: 1.25rem;
-    border-radius: var(--radius-outer-lg);
+  .alpha-card-content {
+    padding: 1.125rem;
   }
 }

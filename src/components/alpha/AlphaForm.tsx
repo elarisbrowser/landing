@@ -1,4 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { useEffect, useRef } from 'react';
 import { Spinner } from '@/components/ui/spinner';
 import {
   alphaAgreements,
@@ -6,9 +7,10 @@ import {
   alphaQuestions,
   alphaTextFields,
 } from '../../config/alpha';
-import { xLink } from '../../config/site';
 import { useAlphaApplication } from '../../hooks/useAlphaApplication';
-import { Animated, loadDelay } from '../../motion';
+import { useMeasuredHeight } from '../../hooks/useMeasuredHeight';
+import { ALPHA_MOTION, Animated, loadDelay } from '../../motion';
+import { AlphaSuccess } from './AlphaSuccess';
 import { ChoiceGroup } from './ChoiceGroup';
 import { TextField } from './Field';
 
@@ -16,11 +18,11 @@ const { firstName, email, discord, xHandle, notes } = alphaTextFields;
 
 /** Form rows, in order; each one rises in on the page-load stagger. */
 const rows = [
-  <div key="identity" className="grid gap-5 sm:grid-cols-2">
+  <div key="identity" className="grid gap-4 sm:grid-cols-2">
     <TextField {...firstName} required />
     <TextField {...email} type="email" required />
   </div>,
-  <div key="socials" className="grid gap-5 sm:grid-cols-2">
+  <div key="socials" className="grid gap-4 sm:grid-cols-2">
     <TextField {...discord} required />
     <TextField {...xHandle} prefix="@" />
   </div>,
@@ -28,8 +30,8 @@ const rows = [
   <ChoiceGroup key="browser" question={alphaQuestions.currentBrowser} />,
   <ChoiceGroup key="test" question={alphaQuestions.testFirst} />,
   <ChoiceGroup key="help" question={alphaQuestions.contribution} />,
-  <TextField key="notes" {...notes} multiline />,
-  <fieldset key="agreements" className="flex flex-col gap-3">
+  <TextField key="notes" {...notes} multiline rows={2} />,
+  <fieldset key="agreements" className="alpha-agreements">
     <legend className="sr-only">{alphaCopy.agreementsLabel}</legend>
     {alphaAgreements.map((agreement) => (
       <label key={agreement} className="alpha-check">
@@ -46,100 +48,103 @@ const FIRST_ROW_STEP = 4;
 export function AlphaForm() {
   const shouldReduceMotion = useReducedMotion();
   const { state, submit } = useAlphaApplication();
-  const swap = shouldReduceMotion
-    ? { duration: 0 }
-    : { duration: 0.32, ease: [0.16, 1, 0.3, 1] as const };
+  const [contentRef, height] = useMeasuredHeight<HTMLDivElement>();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isSuccess = state === 'success';
+  const isSubmitting = state === 'submitting';
+
+  // The card shrinks a lot on success; bring its top back into view.
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!isSuccess || !card) return;
+    const top = card.getBoundingClientRect().top;
+    if (top >= 0) return;
+    window.scrollTo({
+      top: top + window.scrollY - 96,
+      behavior: shouldReduceMotion ? 'auto' : 'smooth',
+    });
+  }, [isSuccess, shouldReduceMotion]);
 
   return (
-    <div className="alpha-card w-full max-w-xl text-left text-on-overlay">
-      <AnimatePresence mode="wait" initial={false}>
-        {state === 'success' ? (
-          <motion.div
-            key="success"
-            initial={
-              shouldReduceMotion
-                ? false
-                : { opacity: 0, y: 8, filter: 'blur(6px)' }
-            }
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={swap}
-            className="flex flex-col items-center gap-2 py-10 text-center"
-            role="status"
-            aria-live="polite"
-          >
-            <h2 className="font-heading text-2xl tracking-tight">
-              {alphaCopy.successTitle}
-            </h2>
-            <p className="max-w-sm text-pretty text-on-overlay/80">
-              {alphaCopy.successBody}
-            </p>
-            <a
-              href={xLink.href}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-2 text-sm text-on-overlay/85 underline decoration-on-overlay/50 underline-offset-4 transition-colors hover:decoration-on-overlay"
+    <motion.div
+      ref={cardRef}
+      initial={false}
+      animate={{ height }}
+      transition={shouldReduceMotion ? { duration: 0 } : ALPHA_MOTION.resize}
+      className="alpha-card w-full max-w-xl overflow-hidden text-left text-on-overlay"
+    >
+      <div ref={contentRef} className="alpha-card-content">
+        <AnimatePresence mode="popLayout" initial={false}>
+          {isSuccess ? (
+            <motion.div key="success">
+              <AlphaSuccess />
+            </motion.div>
+          ) : (
+            <motion.form
+              key="form"
+              aria-label="Elaris alpha application"
+              onSubmit={submit}
+              exit={
+                shouldReduceMotion
+                  ? undefined
+                  : { opacity: 0, scale: 0.98, filter: 'blur(8px)' }
+              }
+              transition={ALPHA_MOTION.exit}
+              className="flex origin-top flex-col gap-6"
             >
-              Follow @elarisbrowser on X →
-            </a>
-          </motion.div>
-        ) : (
-          <motion.form
-            key="form"
-            aria-label="Elaris alpha application"
-            onSubmit={submit}
-            exit={
-              shouldReduceMotion
-                ? undefined
-                : { opacity: 0, y: -8, filter: 'blur(6px)' }
-            }
-            transition={swap}
-            className="flex flex-col gap-7"
-          >
-            <fieldset
-              disabled={state === 'submitting'}
-              className="flex flex-col gap-7 disabled:opacity-60"
-            >
-              {rows.map((row, index) => (
-                <Animated
-                  key={row.key}
-                  preset="rise"
-                  delay={loadDelay(FIRST_ROW_STEP + index)}
-                >
-                  {row}
-                </Animated>
-              ))}
-            </fieldset>
-            <Animated
-              preset="rise"
-              delay={loadDelay(FIRST_ROW_STEP + rows.length)}
-              className="flex flex-col items-stretch gap-3"
-            >
-              <button
-                type="submit"
-                disabled={state === 'submitting'}
-                className="alpha-submit"
+              <fieldset
+                disabled={isSubmitting}
+                className="flex flex-col gap-6 transition-opacity disabled:opacity-60"
               >
-                {state === 'submitting' ? (
-                  <>
-                    <Spinner className="size-4" aria-hidden="true" />
-                    {alphaCopy.submitting}
-                  </>
-                ) : (
-                  alphaCopy.submit
-                )}
-              </button>
-              {state === 'error' && (
-                <p
-                  role="alert"
-                  className="text-center text-sm text-destructive"
+                {rows.map((row, index) => (
+                  <Animated
+                    key={row.key}
+                    preset="rise"
+                    delay={loadDelay(FIRST_ROW_STEP + index)}
+                  >
+                    {row}
+                  </Animated>
+                ))}
+              </fieldset>
+              <Animated
+                preset="rise"
+                delay={loadDelay(FIRST_ROW_STEP + rows.length)}
+                className="flex flex-col items-stretch gap-3"
+              >
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="alpha-submit"
                 >
-                  {alphaCopy.error}
-                </p>
-              )}
-            </Animated>
-          </motion.form>
-        )}
-      </AnimatePresence>
-    </div>
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                      key={isSubmitting ? 'submitting' : 'idle'}
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: shouldReduceMotion ? 0 : 0.16 }}
+                      className="inline-flex items-center gap-2"
+                    >
+                      {isSubmitting && (
+                        <Spinner className="size-4" aria-hidden="true" />
+                      )}
+                      {isSubmitting ? alphaCopy.submitting : alphaCopy.submit}
+                    </motion.span>
+                  </AnimatePresence>
+                </button>
+                {state === 'error' && (
+                  <p
+                    role="alert"
+                    className="text-center text-sm text-destructive"
+                  >
+                    {alphaCopy.error}
+                  </p>
+                )}
+              </Animated>
+            </motion.form>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   );
 }
