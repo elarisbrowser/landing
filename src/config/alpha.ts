@@ -18,12 +18,12 @@ export const alphaCopy = {
   eyebrow: 'Alpha programme',
   title: 'Test elaris early.',
   description:
-    'We’re opening the alpha to a small group of testers. Tell us a little about you and we’ll be in touch.',
+    'We’re opening the alpha to a small group of testers. If selected, we’ll contact you on Discord first. X is optional as a backup if you miss our request.',
   submit: 'Apply for alpha',
   submitting: 'Sending application…',
   successTitle: 'Application received.',
   successBody:
-    'Thanks for applying. If you’re accepted, we’ll add you as a friend on Discord or message you on X.',
+    'Thanks for applying. If selected, look for a Discord friend request and server invite. We’ll use X as a backup if you don’t see the request.',
   error: 'Something went wrong. Please try again.',
   required: 'Required',
   otherPlaceholder: 'Tell us more',
@@ -36,7 +36,7 @@ export const alphaCopy = {
 /** Every box must be ticked before the form submits. */
 export const alphaAgreements = [
   'I made sure my Discord username and all other information is correct.',
-  'I understand that sharing the alpha build is prohibited.',
+  'I’ll keep my personal Discord server invite link private.',
   'I understand this is an alpha version, which is very unfinished and may look completely different from the stable release.',
 ] as const;
 
@@ -61,7 +61,7 @@ export const alphaTextFields = {
   },
   xHandle: {
     name: 'xHandle',
-    label: 'X handle',
+    label: 'X handle (optional)',
     placeholder: 'elarisbrowser',
     autoComplete: 'off',
   },
