@@ -9,11 +9,9 @@ if (!isClerkEnabled && import.meta.env.PROD) {
   console.warn('VITE_CLERK_PUBLISHABLE_KEY is missing; waitlist is disabled.');
 }
 
-/** Where alpha applications are POSTed as JSON (e.g. a Formspree endpoint). */
-export const alphaFormEndpoint = import.meta.env.VITE_ALPHA_FORM_ENDPOINT as
-  | string
-  | undefined;
+/** Public Formspark form ID used for alpha applications. */
+export const alphaFormsparkFormId =
+  (import.meta.env.VITE_ALPHA_FORMSPARK_FORM_ID as string | undefined) ??
+  '8k0QdlVkp';
 
-if (!alphaFormEndpoint && import.meta.env.PROD) {
-  console.warn('VITE_ALPHA_FORM_ENDPOINT is missing; alpha form is disabled.');
-}
+export const alphaFormsparkEndpoint = `https://submit-form.com/${alphaFormsparkFormId}`;

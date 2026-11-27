@@ -1,19 +1,13 @@
 import { type FormEvent, useState } from 'react';
 import { alphaCopy, OTHER_VALUE } from '../config/alpha';
-import { alphaFormEndpoint } from '../config/env';
+import { alphaFormsparkEndpoint } from '../config/env';
 
 export type AlphaState = 'idle' | 'submitting' | 'success' | 'error';
 
 type Application = Record<string, string>;
 
 async function send(application: Application) {
-  if (!alphaFormEndpoint) {
-    // Local stand-in so the flow works in dev without an endpoint.
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    console.info('[alpha:mock] application', application);
-    return;
-  }
-  const response = await fetch(alphaFormEndpoint, {
+  const response = await fetch(alphaFormsparkEndpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify(application),
